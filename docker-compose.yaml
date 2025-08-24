@@ -1,0 +1,87 @@
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres-r2dbc-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - app-network
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+      - app-network
+
+#  shop-service:
+#    build:
+#      context: .
+#      dockerfile: shop-service/Dockerfile
+#    container_name: intershop-shop-service
+#    environment:
+#      SPRING_R2DBC_URL: r2dbc:postgresql://postgres:5432/postgres
+#      SPRING_R2DBC_USERNAME: postgres
+#      SPRING_R2DBC_PASSWORD: password
+#      SPRING_REDIS_HOST: redis
+#      SPRING_REDIS_PORT: 6379
+#      PAYMENT_API_URL: http://payment-service:8080
+#      KEYCLOAK_URL: http://keycloak:8080
+#      KEYCLOAK_REALM: intershop
+#      KEYCLOAK_CLIENT_ID: shop-service
+#      KEYCLOAK_CLIENT_SECRET: lDMUoE4rNETIxNKNIE9u7yUeWtxnXHVs
+#    ports:
+#      - "8080:8080"
+#    depends_on:
+#      - postgres
+#      - redis
+#      - keycloak
+#    networks:
+#      - app-network
+#
+#  payment-service:
+#    build:
+#      context: .
+#      dockerfile: payment-service/Dockerfile
+#    container_name: intershop-payment-service
+#    environment:
+#      PAYMENT_INITIAL_BALANCE: 1000.0
+#      KEYCLOAK_URL: http://keycloak:8080
+#    ports:
+#      - "8081:8080"
+#    depends_on:
+#      - shop-service
+#    networks:
+#      - app-network
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: keycloak
+    command:
+      - start-dev
+      - --import-realm
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    volumes:
+      - ./keycloak/realm-export:/opt/keycloak/data/import
+    ports:
+      - "9090:8080"
+    networks:
+      - app-network
+
+volumes:
+  postgres_data:
+
+networks:
+  app-network:
+    driver: bridge
