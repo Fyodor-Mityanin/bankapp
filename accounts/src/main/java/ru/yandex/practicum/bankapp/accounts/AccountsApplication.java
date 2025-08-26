@@ -1,13 +1,12 @@
-package ru.yandex.practicum.bankapp.ui;
+package ru.yandex.practicum.bankapp.accounts;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class UiApplication {
+public class AccountsApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(UiApplication.class, args);
+		SpringApplication.run(AccountsApplication.class, args);
 	}
-
 }

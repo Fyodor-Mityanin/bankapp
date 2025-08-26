@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Регистрация</title>
+    <script src="env.js"></script>
+    <script>
+        const API_HOST = window._env_.API_HOST || "http://localhost:8080";
+
+        async function handleSignup(e) {
+            e.preventDefault();
+            const form = e.target;
+            const data = Object.fromEntries(new FormData(form));
+
+            const resp = await fetch(`${API_HOST}/api/v1/accounts/signup`, {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(data)
+            });
+
+            const errorsEl = document.getElementById("errors");
+            errorsEl.innerHTML = "";
+
+            if (resp.ok) {
+                alert("Регистрация успешна!");
+                window.location.href = "/"; // редирект на главную/логин
+            } else {
+                try {
+                    const errors = await resp.json();
+                    if (Array.isArray(errors)) {
+                        errors.forEach(err => {
+                            const tr = document.createElement("tr");
+                            tr.innerHTML = `<td colspan="2" style="color:red;">${err}</td>`;
+                            errorsEl.appendChild(tr);
+                        });
+                    } else {
+                        errorsEl.innerHTML = `<tr><td colspan="2" style="color:red;">Ошибка регистрации</td></tr>`;
+                    }
+                } catch {
+                    errorsEl.innerHTML = `<tr><td colspan="2" style="color:red;">Ошибка регистрации</td></tr>`;
+                }
+            }
+        }
+    </script>
+</head>
+
+<body>
+<form id="signupForm" onsubmit="handleSignup(event)">
+    <table style="width:30%;margin-left:auto;margin-right:auto;border-radius:2%;padding:10px;background-color:whitesmoke;">
+        <tr>
+            <td colspan="2">
+                <span style="color:red;font-weight:bold;">*</span> Все поля обязательны для заполнения
+            </td>
+        </tr>
+        <tbody id="errors"></tbody>
+        <tr>
+            <td style="font-weight:bold;">Логин</td>
+            <td>
+                <input name="login" type="text" style="width:100%" required/>
+            </td>
+        </tr>
+        <tr>
+            <td style="font-weight:bold;">Пароль</td>
+            <td>
+                <input name="password" type="password" style="width:100%" required/>
+            </td>
+        </tr>
+        <tr>
+            <td style="font-weight:bold;">Повторите пароль</td>
+            <td>
+                <input name="confirm_password" type="password" style="width:100%" required/>
+            </td>
+        </tr>
+        <tr>
+            <td style="font-weight:bold;">Фамилия Имя</td>
+            <td>
+                <input name="name" type="text" style="width:100%" required/>
+            </td>
+        </tr>
+        <tr>
+            <td style="font-weight:bold;">Дата рождения </td>
+            <td>
+                <input name="birthdate" type="date" style="width:100%" required/>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align:right" colspan="2">
+                <button>Зарегистрироваться</button>
+            </td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>

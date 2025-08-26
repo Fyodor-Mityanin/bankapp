@@ -16,7 +16,8 @@
 
     <modules>
         <module>gateway</module>
-        <module>ui</module>
+        <module>accounts</module>
+<!--        <module>ui</module>-->
     </modules>
 
     <properties>
