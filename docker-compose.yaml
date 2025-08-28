@@ -9,9 +9,12 @@ services:
       - "9090:80"
 #    depends_on:
 #      - shop-service
+    networks:
+      - app-network
+
   postgres:
     image: postgres:latest
-    container_name: postgres-db
+    container_name: postgres
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password

@@ -1,0 +1,20 @@
+server:
+  port: 8081
+
+spring:
+#  security:
+#    oauth2:
+#      client:
+#        registration:
+#          keycloak:
+#            client-id: shop-service
+#            client-secret: lDMUoE4rNETIxNKNIE9u7yUeWtxnXHVs
+#            authorization-grant-type: client_credentials
+#        provider:
+#          keycloak:
+#            token-uri: http://localhost:9090/realms/intershop/protocol/openid-connect/token
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/accounts
+    username: postgres
+    password: password
