@@ -18,6 +18,7 @@ public abstract class AccountMapper {
 
     abstract AccountResponse toResponse(Account source);
 
+    @Mapping(target = "balances", ignore = true)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "authorities", ignore = true)
     @Mapping(target = "password", qualifiedByName = "encodePassword")

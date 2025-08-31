@@ -3,12 +3,14 @@ services:
     build: ./ui
     container_name: bankapp-ui
     environment:
-#      - API_HOST=http://gateway:8080
-      - API_HOST=http://localhost:8080
+#      - API_HOST=http://gateway:8081
+      - API_HOST=http://localhost:8081
     ports:
       - "9090:80"
 #    depends_on:
 #      - shop-service
+    volumes:
+      - ./ui/public:/usr/share/nginx/html:ro
     networks:
       - app-network
 

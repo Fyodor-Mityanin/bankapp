@@ -1,7 +1,12 @@
 package ru.yandex.practicum.bankapp.accounts.controller;
 
-import java.util.List;
+import java.time.LocalDate;
 
-public record AccountRequest(String login, String password, List<BalanceDto> balances) {
-    public record BalanceDto(String currency, Double amount) {}
+public record AccountRequest(
+        String login,
+        String password,
+        String confirmPassword,
+        String name,
+        LocalDate birthdate
+) {
 }

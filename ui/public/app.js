@@ -3,7 +3,11 @@ let currentUser = null;
 
 // Загружаем данные пользователя
 async function loadUser() {
-    const resp = await fetch(`${API_HOST}/api/user/me`);
+    console.log("Loading user...");
+    const resp = await fetch(
+        `${API_HOST}/api/v1/auth/me`,
+        {credentials: "include"}
+    );
     if (!resp.ok) {
         alert("Ошибка загрузки пользователя");
         return;

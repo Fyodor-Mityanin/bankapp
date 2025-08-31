@@ -12,10 +12,11 @@
             const form = e.target;
             const data = Object.fromEntries(new FormData(form));
 
-            const resp = await fetch(`${API_HOST}/api/v1/accounts/signup`, {
+            const resp = await fetch(`${API_HOST}/api/v1/auth/register`, {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
-                body: JSON.stringify(data)
+                body: JSON.stringify(data),
+                credentials: "include"
             });
 
             const errorsEl = document.getElementById("errors");
