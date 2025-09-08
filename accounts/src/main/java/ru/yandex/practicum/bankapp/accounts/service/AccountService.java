@@ -27,4 +27,12 @@ public class AccountService {
     public boolean existsByLogin(String login) {
         return accountRepository.existsByLogin(login);
     }
+
+    public void changePassword(Long id, String password) {
+        String encodePassword = accountMapper.encodePassword(password);
+        accountRepository.findById(id).ifPresent(account -> {
+            account.setPassword(encodePassword);
+            accountRepository.save(account);
+        });
+    }
 }

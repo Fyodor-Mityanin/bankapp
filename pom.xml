@@ -17,7 +17,6 @@
     <modules>
         <module>gateway</module>
         <module>accounts</module>
-<!--        <module>ui</module>-->
     </modules>
 
     <properties>
@@ -31,6 +30,13 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>2025.1.0-M1</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
 <!--            <dependency>-->
 <!--                <groupId>org.openapitools</groupId>-->
 <!--                <artifactId>jackson-databind-nullable</artifactId>-->

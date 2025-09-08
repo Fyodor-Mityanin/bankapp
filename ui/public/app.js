@@ -34,7 +34,7 @@ function renderPasswordForm() {
                     Пароль: <input name="password" type="password" required/>
                 </p>
                 <p>
-                    Повторите пароль: <input name="confirm_password" type="password" required/>
+                    Повторите пароль: <input name="confirmPassword" type="password" required/>
                 </p>
             </td>
             <td style="text-align:right">
@@ -47,10 +47,11 @@ function renderPasswordForm() {
     document.getElementById("passwordChangeForm").onsubmit = async (e) => {
         e.preventDefault();
         const data = Object.fromEntries(new FormData(e.target));
-        const resp = await fetch(`${API_HOST}/api/user/${currentUser.login}/editPassword`, {
+        const resp = await fetch(`${API_HOST}/api/v1/auth/change-password`, {
             method: "POST",
             headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(data)
+            body: JSON.stringify(data),
+            credentials: "include"
         });
         if (resp.ok) alert("Пароль изменён");
         else alert("Ошибка при смене пароля");
