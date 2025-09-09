@@ -1,3 +1,3 @@
 window._env_ = {
-    API_HOST: "http://localhost:8081"
+    API_HOST: "http://localhost:8080"
 }

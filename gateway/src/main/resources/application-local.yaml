@@ -36,3 +36,11 @@ spring:
                 - Path=/api/v1/rates/**
               filters:
                 - RewritePath=/api/v1/rates/(?<segment>.*), /api/v1/${segment}
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    org.springframework.http.server.reactive: DEBUG
+    org.springframework.web.reactive: DEBUG
+    reactor.netty.http.client: DEBUG
+    reactor.netty.http.server: DEBUG

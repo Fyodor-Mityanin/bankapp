@@ -5,7 +5,7 @@ let currentUser = null;
 async function loadUser() {
     console.log("Loading user...");
     const resp = await fetch(
-        `${API_HOST}/api/v1/auth/me`,
+        `${API_HOST}/api/v1/accounts/auth/me`,
         {credentials: "include"}
     );
     if (!resp.ok) {
@@ -47,7 +47,7 @@ function renderPasswordForm() {
     document.getElementById("passwordChangeForm").onsubmit = async (e) => {
         e.preventDefault();
         const data = Object.fromEntries(new FormData(e.target));
-        const resp = await fetch(`${API_HOST}/api/v1/auth/change-password`, {
+        const resp = await fetch(`${API_HOST}/api/v1/accounts/auth/change-password`, {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify(data),

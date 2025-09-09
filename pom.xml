@@ -17,11 +17,13 @@
     <modules>
         <module>gateway</module>
         <module>accounts</module>
+        <module>exchange</module>
     </modules>
 
     <properties>
         <java.version>24</java.version>
         <org.mapstruct.version>1.6.3</org.mapstruct.version>
+        <spring-cloud.version>2025.0.0</spring-cloud.version>
 <!--        <org.openapitools.version>0.2.6</org.openapitools.version>-->
 <!--        <io.swagger.core.v3.version>2.2.31</io.swagger.core.v3.version>-->
 <!--        <org.testcontainers.version>1.21.2</org.testcontainers.version>-->
@@ -33,7 +35,7 @@
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
-                <version>2025.1.0-M1</version>
+                <version>${spring-cloud.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
