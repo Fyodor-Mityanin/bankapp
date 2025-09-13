@@ -1,4 +1,4 @@
-package ru.yandex.practicum.bankapp.exchange.config;
+package ru.yandex.practicum.bankapp.exchangegenerator.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

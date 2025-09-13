@@ -1,3 +1,5 @@
+server:
+  port: 8083
 exchange:
   service:
     url: http://localhost:8082

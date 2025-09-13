@@ -1,10 +1,10 @@
-package ru.yandex.practicum.bankapp.exchange.service;
+package ru.yandex.practicum.bankapp.exchangegenerator.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.bankapp.api.exchangegenerator.api.ExchangeRate;
+import ru.yandex.practicum.bankapp.api.exchangegenerator.api.ExchangeRateDto;
 import ru.yandex.practicum.bankapp.api.exchangegenerator.client.ExchangeClient;
 
 import java.math.BigDecimal;
@@ -39,6 +39,6 @@ public class ExchangeGeneratorService {
 
     private void sendRate(String from, String to, BigDecimal rate) {
         log.info("Sending rate {} to {} = {}", from, to, rate);
-        exchangeClient.sendRate(new ExchangeRate(from, to, rate));
+        exchangeClient.sendRate(new ExchangeRateDto(from, to, rate));
     }
 }

@@ -33,3 +33,38 @@ insert into accounts (login, password) values
 ('user5', '{bcrypt}$2a$10$qpq1te9H6GAfnpX4dKAFGuJt0VR5BosNqUXNuMFhXWNUOo5mJqUaG'),
 -- пароль "admin123"
 ('admin', '{bcrypt}$2a$10$Pk.yhEYQ6XHEdvWz7aULXO1NuOBUxykZasRWzAyvTN9mfEuBvTgz2');
+
+create database exchange;
+
+\connect exchange;
+
+-- Справочник валют
+CREATE TABLE currencies
+(
+    code VARCHAR(3) PRIMARY KEY, -- RUB, USD, CNY
+    name TEXT NOT NULL           -- Рубль, Доллар США, Юань
+);
+
+-- История курсов валют
+CREATE TABLE exchange_rates
+(
+    id            BIGSERIAL PRIMARY KEY,
+    currency_from VARCHAR(3)     NOT NULL,
+    currency_to   VARCHAR(3)     NOT NULL,
+    rate          NUMERIC(18, 6) NOT NULL,
+    created_at    TIMESTAMPTZ    NOT NULL DEFAULT now(),
+    CONSTRAINT fk_currency_from FOREIGN KEY (currency_from) REFERENCES currencies (code),
+    CONSTRAINT fk_currency_to FOREIGN KEY (currency_to) REFERENCES currencies (code),
+    CONSTRAINT chk_currency CHECK (currency_from <> currency_to)
+);
+
+-- Индексы
+CREATE INDEX idx_exchange_rates_from_to ON exchange_rates(currency_from, currency_to);
+CREATE INDEX idx_exchange_rates_created_at ON exchange_rates(created_at);
+
+-- Наполнение справочника валют
+INSERT INTO currencies (code, name)
+VALUES ('RUB', 'Рубль'),
+       ('USD', 'Доллар США'),
+       ('CNY', 'Китайский юань');
+
