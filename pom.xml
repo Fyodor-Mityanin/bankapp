@@ -17,6 +17,8 @@
     <modules>
         <module>gateway</module>
         <module>accounts</module>
+        <module>exchange-generator</module>
+        <module>exchange-generator-api</module>
         <module>exchange</module>
     </modules>
 
