@@ -11,43 +11,49 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.bankapp.accounts.entity.Account;
 import ru.yandex.practicum.bankapp.accounts.service.AccountService;
 
 @Slf4j
 @RestController
-@RequestMapping("api/v1/auth")
+@RequestMapping("api/v1/user")
 @RequiredArgsConstructor
-public class AuthenticationController {
+public class UserController {
 
     private final AuthenticationManager authenticationManager;
     private final AccountService accountService;
     private final SecurityContextRepository securityContextRepository;
 
-    @PostMapping("/login")
-    public void login(
-            @RequestBody LoginRequest request,
+    @PostMapping("/change-password")
+    public void changePassword(
+            @RequestBody ChangePasswordRequest request,
             HttpServletRequest httpRequest,
-            HttpServletResponse httpResponse
+            HttpServletResponse httpResponse,
+            Authentication authentication
     ) {
-        UsernamePasswordAuthenticationToken authReq = new UsernamePasswordAuthenticationToken(request.login(), request.password());
+        Account account = (Account) authentication.getPrincipal();
+        if (!request.password.equals(request.confirmPassword)) {
+            throw new RuntimeException("Passwords not the same");
+        }
+        accountService.changePassword(account.getId(), request.password);
+        UsernamePasswordAuthenticationToken authReq = new UsernamePasswordAuthenticationToken(account.getLogin(), request.password());
         Authentication auth = authenticationManager.authenticate(authReq);
         setToContext(auth, httpRequest, httpResponse);
     }
 
-    @PostMapping("/register")
-    public AccountResponse register(
-            @RequestBody AccountRequest request,
-            HttpServletRequest httpRequest,
-            HttpServletResponse httpResponse
+    @GetMapping("/me")
+    public AccountResponse me(Authentication authentication) {
+        Account account = (Account) authentication.getPrincipal();
+        return accountService.getAccount(account);
+    }
+
+    @PostMapping("/edit")
+    public void edit(
+            @RequestBody AccountEditRequest request,
+            Authentication authentication
     ) {
-        if (accountService.existsByLogin(request.login())) {
-            throw new RuntimeException("Username already exists");
-        }
-        AccountResponse account = accountService.create(request);
-        UsernamePasswordAuthenticationToken authReq = new UsernamePasswordAuthenticationToken(request.login(), request.password());
-        Authentication auth = authenticationManager.authenticate(authReq);
-        setToContext(auth, httpRequest, httpResponse);
-        return account;
+        Account account = (Account) authentication.getPrincipal();
+        accountService.edit(account, request);
     }
 
     private void setToContext(
@@ -61,6 +67,6 @@ public class AuthenticationController {
         log.info("Session ID: {}", httpRequest.getSession().getId());
     }
 
-    public record LoginRequest(String login, String password) {
+    public record ChangePasswordRequest(String password, String confirmPassword) {
     }
 }

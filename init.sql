@@ -5,7 +5,9 @@ create database accounts;
 create table accounts (
     id          serial primary key,
     login       varchar(100) unique not null,
-    password    varchar(255) not null
+    password    varchar(255) not null,
+    full_name    varchar(255) not null,
+    birthdate   date
 );
 
 create table account_balance (
@@ -13,26 +15,27 @@ create table account_balance (
     currency varchar(3) not null,
     amount numeric(15,2) not null default 0,
     account_id bigint not null,
+    enable boolean not null default true,
     constraint fk_account foreign key (account_id) references accounts(id) on delete cascade
 );
 
 create index idx_account_balance_account_id on account_balance(account_id);
 
-insert into accounts (login, password) values
+insert into accounts (login, password, full_name) values
 -- пароль "password"
-('user', '{bcrypt}$2a$10$ayC7NXp7qEIbJJb21ZZIe.a3f11IC/yEuOwWhrUuwK1TIP0ptITDq'),
+('user', '{bcrypt}$2a$10$ayC7NXp7qEIbJJb21ZZIe.a3f11IC/yEuOwWhrUuwK1TIP0ptITDq', 'user'),
 -- пароль "password1"
-('user1', '{bcrypt}$2a$10$EAyb8FfYBSQ74VBRgicIRePvd8szh9HN6ccyeKT4bUjEBJGyVjSu.'),
+('user1', '{bcrypt}$2a$10$EAyb8FfYBSQ74VBRgicIRePvd8szh9HN6ccyeKT4bUjEBJGyVjSu.', 'user1'),
 -- пароль "password2"
-('user2', '{bcrypt}$2a$10$Aa/f6s83IxwRtjpsPyIl.uSr8UvAbuOhDkqTO2.lMdv5Ii2B8UUe6'),
+('user2', '{bcrypt}$2a$10$Aa/f6s83IxwRtjpsPyIl.uSr8UvAbuOhDkqTO2.lMdv5Ii2B8UUe6', 'user2'),
 -- пароль "password3"
-('user3', '{bcrypt}$2a$10$wQAB87dwsz5nnXDcHJhSgOvIL6BtwD6j0yiarlPmLj.TYSZDRlgO2'),
+('user3', '{bcrypt}$2a$10$wQAB87dwsz5nnXDcHJhSgOvIL6BtwD6j0yiarlPmLj.TYSZDRlgO2','user3'),
 -- пароль "password4"
-('user4', '{bcrypt}$2a$10$6BvjbbgWwTy6/nRs/DN1dOnKFYKkvRNReuvKZ77YWbn6HEbb5Qxpy'),
+('user4', '{bcrypt}$2a$10$6BvjbbgWwTy6/nRs/DN1dOnKFYKkvRNReuvKZ77YWbn6HEbb5Qxpy','user4'),
 -- пароль "password5"
-('user5', '{bcrypt}$2a$10$qpq1te9H6GAfnpX4dKAFGuJt0VR5BosNqUXNuMFhXWNUOo5mJqUaG'),
+('user5', '{bcrypt}$2a$10$qpq1te9H6GAfnpX4dKAFGuJt0VR5BosNqUXNuMFhXWNUOo5mJqUaG','user5'),
 -- пароль "admin123"
-('admin', '{bcrypt}$2a$10$Pk.yhEYQ6XHEdvWz7aULXO1NuOBUxykZasRWzAyvTN9mfEuBvTgz2');
+('admin', '{bcrypt}$2a$10$Pk.yhEYQ6XHEdvWz7aULXO1NuOBUxykZasRWzAyvTN9mfEuBvTgz2','password');
 
 create database exchange;
 

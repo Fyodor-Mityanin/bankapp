@@ -3,10 +3,16 @@ package ru.yandex.practicum.bankapp.accounts.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.yandex.practicum.bankapp.accounts.controller.AccountEditRequest;
 import ru.yandex.practicum.bankapp.accounts.controller.AccountRequest;
 import ru.yandex.practicum.bankapp.accounts.controller.AccountResponse;
+import ru.yandex.practicum.bankapp.accounts.controller.BalanceController;
 import ru.yandex.practicum.bankapp.accounts.entity.Account;
+import ru.yandex.practicum.bankapp.accounts.entity.AccountBalance;
 import ru.yandex.practicum.bankapp.accounts.repository.AccountRepository;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -15,7 +21,6 @@ public class AccountService {
     private final AccountRepository accountRepository;
     private final AccountMapper accountMapper;
 //    private final NotificationClient notificationClient;
-
 
     @Transactional
     public AccountResponse create(AccountRequest request) {
@@ -39,5 +44,27 @@ public class AccountService {
     @Transactional(readOnly = true)
     public AccountResponse getAccount(Account account) {
         return accountMapper.toResponse(account);
+    }
+
+    @Transactional
+    public void edit(Account account, AccountEditRequest request) {
+        account.setFullName(request.name());
+        account.setBirthdate(request.birthdate());
+        Set<String> enabled = new HashSet<>(request.account());
+        for (AccountBalance balance : account.getBalances()) {
+            boolean shouldEnable = enabled.contains(balance.getCurrency());
+            boolean canDisable = !shouldEnable && balance.getAmount() == 0;
+            balance.setEnable(shouldEnable || !canDisable);
+        }
+        accountRepository.save(account);
+    }
+
+    @Transactional
+    public void editBalance(Account account, BalanceController.CashRequest request) {
+        account.getBalances().stream()
+                .filter(i -> i.getCurrency().equals(request.currency()))
+                .findFirst()
+                .ifPresent(balance -> balance.setAmount(balance.getAmount() + request.value()));
+        accountRepository.save(account);
     }
 }

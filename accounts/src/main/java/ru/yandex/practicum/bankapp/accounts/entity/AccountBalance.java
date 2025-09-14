@@ -3,6 +3,7 @@ package ru.yandex.practicum.bankapp.accounts.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Getter
@@ -23,4 +24,8 @@ public class AccountBalance {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id")
     private Account account;
+
+    @ColumnDefault("true")
+    @Column(name = "enable", nullable = false)
+    private Boolean enable = false;
 }

@@ -5,7 +5,7 @@ let currentUser = null;
 async function loadUser() {
     console.log("Loading user...");
     const resp = await fetch(
-        `${API_HOST}/api/v1/accounts/auth/me`,
+        `${API_HOST}/api/v1/accounts/user/me`,
         {credentials: "include"}
     );
     if (!resp.ok) {
@@ -47,7 +47,7 @@ function renderPasswordForm() {
     document.getElementById("passwordChangeForm").onsubmit = async (e) => {
         e.preventDefault();
         const data = Object.fromEntries(new FormData(e.target));
-        const resp = await fetch(`${API_HOST}/api/v1/accounts/auth/change-password`, {
+        const resp = await fetch(`${API_HOST}/api/v1/accounts/user/change-password`, {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify(data),
@@ -63,9 +63,9 @@ function renderUserAccountsForm() {
     const accs = currentUser.accounts.map(a => `
         <tr>
             <td style="font-weight:bold;">${a.currency.title}</td>
-            <td>${a.exists ? (a.value + " " + a.currency.name) : ""}</td>
+            <td>${a.enabled ? (a.value + " " + a.currency.name) : ""}</td>
             <td style="text-align:right">
-                <input type="checkbox" name="account" value="${a.currency.name}" ${a.exists ? "checked" : ""}/>
+                <input type="checkbox" name="account" value="${a.currency.name}" ${a.enabled ? "checked" : ""}/>
             </td>
         </tr>`).join("");
 
@@ -91,20 +91,28 @@ function renderUserAccountsForm() {
     `;
     document.getElementById("userAccountsForm").onsubmit = async (e) => {
         e.preventDefault();
-        const data = Object.fromEntries(new FormData(e.target));
-        const resp = await fetch(`${API_HOST}/api/user/${currentUser.login}/editUserAccounts`, {
+        const formData = new FormData(e.target);
+        const data = Object.fromEntries(formData.entries());
+        data.account = formData.getAll("account");
+        const resp = await fetch(`${API_HOST}/api/v1/accounts/user/edit`, {
             method: "POST",
             headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(data)
+            body: JSON.stringify(data),
+            credentials: "include"
         });
-        if (resp.ok) alert("Аккаунт обновлён");
-        else alert("Ошибка при обновлении");
+        if (resp.ok) {
+            alert("Аккаунт обновлён");
+            location.reload();
+        } else {
+            alert("Ошибка при обновлении");
+        }
     };
 }
 
 function renderCashForm() {
     const el = document.getElementById("cash_form");
-    const opts = currentUser.currencies.map(c => `<option value="${c.name}">${c.title}</option>`).join("");
+    const opts = currentUser.accounts.filter(a => a.enabled).map(a => `<option value="${a.currency.name}">${a.currency.title}</option>`).join("");
+    console.log(opts)
     el.innerHTML = `
       <form id="cashForm">
         <table style="width:100%;padding:10px;background-color:whitesmoke;">
@@ -115,8 +123,8 @@ function renderCashForm() {
             </td>
             <td><input name="value" type="number" required/></td>
             <td style="text-align:right">
-                <button name="action" value="PUT">Положить</button>
-                <button name="action" value="GET">Снять</button>
+                <button type="submit" name="action" value="deposit">Положить</button>
+                <button type="submit" name="action" value="withdraw">Снять</button>
             </td>
           </tr>
         </table>
@@ -125,13 +133,28 @@ function renderCashForm() {
     document.getElementById("cashForm").onsubmit = async (e) => {
         e.preventDefault();
         const data = Object.fromEntries(new FormData(e.target));
-        const resp = await fetch(`${API_HOST}/api/user/${currentUser.login}/cash`, {
+        const action = formData.get("action");
+        let endpoint;
+        if (action === "deposit") {
+            endpoint = "/api/v1/accounts/balance/deposit";
+        } else if (action === "withdraw") {
+            endpoint = "/api/v1/accounts/balance/withdraw";
+        } else {
+            alert("Неизвестное действие");
+            return;
+        }
+
+        const resp = await fetch(`${API_HOST}${endpoint}`, {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify(data)
         });
-        if (resp.ok) alert("Операция выполнена");
-        else alert("Ошибка при операции");
+        if (resp.ok) {
+            alert("Операция выполнена");
+            location.reload();
+        } else {
+            alert("Ошибка при операции");
+        }
     };
 }
 
