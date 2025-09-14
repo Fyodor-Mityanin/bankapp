@@ -10,7 +10,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>exchange-generator-api</artifactId>
+    <artifactId>exchange-api</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
     <dependencies>

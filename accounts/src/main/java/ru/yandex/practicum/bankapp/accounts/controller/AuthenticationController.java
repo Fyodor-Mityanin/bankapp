@@ -69,9 +69,9 @@ public class AuthenticationController {
     }
 
     @GetMapping("/me")
-    public MeResponse me(Authentication authentication) {
+    public AccountResponse me(Authentication authentication) {
         Account account = (Account) authentication.getPrincipal();
-        return new MeResponse(account.getId(), account.getUsername());
+        return accountService.getAccount(account);
     }
 
     private void setToContext(
@@ -83,9 +83,6 @@ public class AuthenticationController {
         context.setAuthentication(authentication);
         securityContextRepository.saveContext(context, httpRequest, httpResponse);
         log.info("Session ID: {}", httpRequest.getSession().getId());
-    }
-
-    public record MeResponse(Long id, String login) {
     }
 
     public record LoginRequest(String login, String password) {

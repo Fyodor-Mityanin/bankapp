@@ -35,4 +35,9 @@ public class AccountService {
             accountRepository.save(account);
         });
     }
+
+    @Transactional(readOnly = true)
+    public AccountResponse getAccount(Account account) {
+        return accountMapper.toResponse(account);
+    }
 }

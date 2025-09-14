@@ -202,7 +202,7 @@ async function renderTransferOtherForm() {
 async function loadRates() {
     const td = document.getElementById('exchange_rates');
     try {
-        const response = await fetch(`${API_HOST}/api/rates`);
+        const response = await fetch(`${API_HOST}/api/v1/exchange/rates`);
         const json = await response.json();
         let table = '<table style="width:100%;padding:10px;background-color:whitesmoke;">';
         table += '<tr><th colspan="3">Курсы валют по отношению к рублю</th></tr>';

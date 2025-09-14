@@ -1,0 +1,11 @@
+spring:
+ application:
+    name: exchange
+    datasource:
+      url: ${POSTGRES_URL}
+      username: ${POSTGRES_USER}
+      password: ${POSTGRES_PASSWORD}
+
+#payment:
+#  api:
+#    url: ${PAYMENT_API_URL}

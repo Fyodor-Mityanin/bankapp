@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
@@ -20,12 +20,12 @@ public class ExchangeRate {
     private Long id;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne
     @JoinColumn(name = "currency_from", nullable = false)
     private Currency currencyFrom;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne
     @JoinColumn(name = "currency_to", nullable = false)
     private Currency currencyTo;
 
@@ -33,8 +33,7 @@ public class ExchangeRate {
     @Column(name = "rate", nullable = false, precision = 18, scale = 6)
     private BigDecimal rate;
 
-    @NotNull
-    @ColumnDefault("now()")
+    @CreationTimestamp
     @Column(name = "created_at", nullable = false)
     private OffsetDateTime createdAt;
 }

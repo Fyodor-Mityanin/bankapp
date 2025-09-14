@@ -30,9 +30,9 @@ spring:
               filters:
                 - RewritePath=/api/v1/accounts/(?<segment>.*), /api/v1/${segment}
 
-            - id: rates
+            - id: exchange
               uri: http://localhost:8082
               predicates:
-                - Path=/api/v1/rates/**
+                - Path=/api/v1/exchange/**
               filters:
-                - RewritePath=/api/v1/rates/(?<segment>.*), /api/v1/${segment}
+                - RewritePath=/api/v1/exchange/(?<segment>.*), /api/v1/${segment}

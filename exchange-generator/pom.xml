@@ -18,7 +18,7 @@
         <!-- CLIENT -->
         <dependency>
             <groupId>ru.yandex.practicum.bankapp</groupId>
-            <artifactId>exchange-generator-api</artifactId>
+            <artifactId>exchange-api</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
