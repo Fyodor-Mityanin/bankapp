@@ -60,11 +60,21 @@ public class AccountService {
     }
 
     @Transactional
-    public void editBalance(Account account, BalanceController.CashRequest request) {
+    public void editBalance(Account account, BalanceController.CashRequest request, Operator operator) {
+        double delta = switch (operator) {
+            case PLUS -> request.value();
+            case MINUS -> -request.value();
+        };
+
         account.getBalances().stream()
                 .filter(i -> i.getCurrency().equals(request.currency()))
                 .findFirst()
-                .ifPresent(balance -> balance.setAmount(balance.getAmount() + request.value()));
+                .ifPresent(balance -> balance.setAmount(balance.getAmount() + delta));
         accountRepository.save(account);
+    }
+
+    public enum Operator {
+        PLUS,
+        MINUS
     }
 }

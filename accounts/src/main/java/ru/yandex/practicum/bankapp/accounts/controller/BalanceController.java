@@ -21,7 +21,7 @@ public class BalanceController {
             Authentication authentication
     ) {
         Account account = (Account) authentication.getPrincipal();
-        accountService.editBalance(account, request);
+        accountService.editBalance(account, request, AccountService.Operator.PLUS);
     }
 
     @PostMapping("/withdraw")
@@ -30,8 +30,9 @@ public class BalanceController {
             Authentication authentication
     ) {
         Account account = (Account) authentication.getPrincipal();
-        accountService.editBalance(account, request);
+        accountService.editBalance(account, request, AccountService.Operator.MINUS);
     }
 
-    public record CashRequest(String currency, Double value) {}
+    public record CashRequest(String currency, Double value) {
+    }
 }

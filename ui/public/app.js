@@ -114,48 +114,48 @@ function renderCashForm() {
     const opts = currentUser.accounts.filter(a => a.enabled).map(a => `<option value="${a.currency.name}">${a.currency.title}</option>`).join("");
     console.log(opts)
     el.innerHTML = `
-      <form id="cashForm">
+      <div id="cashForm">
         <table style="width:100%;padding:10px;background-color:whitesmoke;">
           <tr>
             <td style="font-weight:bold;">Наличные</td>
             <td>
-                Валюта <select name="currency">${opts}</select>
+                Валюта <select id="cashCurrency">${opts}</select>
             </td>
-            <td><input name="value" type="number" required/></td>
+            <td><input id="cashValue" type="number" required/></td>
             <td style="text-align:right">
-                <button type="submit" name="action" value="deposit">Положить</button>
-                <button type="submit" name="action" value="withdraw">Снять</button>
+                <button type="button" id="depositBtn">Положить</button>
+                <button type="button" id="withdrawBtn">Снять</button>
             </td>
           </tr>
         </table>
-      </form>
+      </div>
     `;
-    document.getElementById("cashForm").onsubmit = async (e) => {
-        e.preventDefault();
-        const data = Object.fromEntries(new FormData(e.target));
-        const action = formData.get("action");
-        let endpoint;
-        if (action === "deposit") {
-            endpoint = "/api/v1/accounts/balance/deposit";
-        } else if (action === "withdraw") {
-            endpoint = "/api/v1/accounts/balance/withdraw";
-        } else {
-            alert("Неизвестное действие");
-            return;
-        }
 
-        const resp = await fetch(`${API_HOST}${endpoint}`, {
+    async function sendCash(action) {
+        const currency = document.getElementById("cashCurrency").value;
+        const value = document.getElementById("cashValue").value;
+
+        const url = action === "deposit"
+            ? `${API_HOST}/api/v1/accounts/balance/deposit`
+            : `${API_HOST}/api/v1/accounts/balance/withdraw`;
+
+        const resp = await fetch(url, {
             method: "POST",
             headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(data)
+            body: JSON.stringify({ currency, value }),
+            credentials: "include"
         });
+
         if (resp.ok) {
             alert("Операция выполнена");
             location.reload();
         } else {
             alert("Ошибка при операции");
         }
-    };
+    }
+
+    document.getElementById("depositBtn").onclick = () => sendCash("deposit");
+    document.getElementById("withdrawBtn").onclick = () => sendCash("withdraw");
 }
 
 function renderTransferSelfForm() {
