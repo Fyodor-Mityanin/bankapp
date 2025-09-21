@@ -1,7 +1,6 @@
 spring:
-  application:
-    name: exchange-generator
-
+ application:
+  name: cash
 
 exchange:
   service:

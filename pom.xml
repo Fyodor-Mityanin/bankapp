@@ -20,6 +20,8 @@
         <module>exchange-generator</module>
         <module>exchange-api</module>
         <module>exchange</module>
+        <module>cash</module>
+        <module>accounts-api</module>
     </modules>
 
     <properties>

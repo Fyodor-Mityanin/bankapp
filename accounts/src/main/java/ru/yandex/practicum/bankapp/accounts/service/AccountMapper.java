@@ -15,14 +15,19 @@ import java.util.Map;
 @Mapper
 public abstract class AccountMapper {
 
-    private static final Map<String, String> currencyMap =
+    private static final Map<String, String> CURRENCY_MAP =
             Map.of("RUB", "Рубль", "USD", "Доллар", "CNY", "Юань");
+    protected static final List<AccountResponse.CurrencyDto> CURRENCY_DTO_LIST =
+            CURRENCY_MAP.entrySet().stream()
+                    .map(i -> new AccountResponse.CurrencyDto(i.getKey(), i.getValue()))
+                    .toList();
 
     @Setter(onMethod_ = @Autowired)
     protected PasswordEncoder passwordEncoder;
 
     @Mapping(target = "name", source = "fullName")
     @Mapping(target = "accounts", source = "balances")
+    @Mapping(target = "currencies", expression = "java(CURRENCY_DTO_LIST)")
     abstract AccountResponse toResponse(Account source);
 
     @Mapping(target = "balances", ignore = true)
@@ -37,22 +42,8 @@ public abstract class AccountMapper {
         return passwordEncoder.encode(password);
     }
 
-   @AfterMapping
-    public void addEmptyBalances(@MappingTarget Account target) {
-       List<AccountBalance> list = currencyMap.keySet().stream()
-               .map(i -> {
-                   AccountBalance accountBalance = new AccountBalance();
-                   accountBalance.setCurrency(i);
-                   accountBalance.setAmount(0.0);
-                   accountBalance.setAccount(target);
-                   return accountBalance;
-               })
-               .toList();
-       target.getBalances().addAll(list);
-   }
-
     protected AccountResponse.BalanceDto toResponse(AccountBalance source) {
-        AccountResponse.CurrencyDto currencyDto = new AccountResponse.CurrencyDto(source.getCurrency(), currencyMap.get(source.getCurrency()));
+        AccountResponse.CurrencyDto currencyDto = new AccountResponse.CurrencyDto(source.getCurrency(), CURRENCY_MAP.get(source.getCurrency()));
         return  new AccountResponse.BalanceDto(source.getEnable(), currencyDto, source.getAmount());
     }
 }

@@ -6,10 +6,10 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.bankapp.accounts.controller.AccountEditRequest;
 import ru.yandex.practicum.bankapp.accounts.controller.AccountRequest;
 import ru.yandex.practicum.bankapp.accounts.controller.AccountResponse;
-import ru.yandex.practicum.bankapp.accounts.controller.BalanceController;
 import ru.yandex.practicum.bankapp.accounts.entity.Account;
 import ru.yandex.practicum.bankapp.accounts.entity.AccountBalance;
 import ru.yandex.practicum.bankapp.accounts.repository.AccountRepository;
+import ru.yandex.practicum.bankapp.api.exchangegenerator.api.CashRequestDto;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -60,7 +60,7 @@ public class AccountService {
     }
 
     @Transactional
-    public void editBalance(Account account, BalanceController.CashRequest request, Operator operator) {
+    public void editBalance(Account account, CashRequestDto request, Operator operator) {
         double delta = switch (operator) {
             case PLUS -> request.value();
             case MINUS -> -request.value();
