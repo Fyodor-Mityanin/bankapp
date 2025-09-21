@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.yandex.practicum.bankapp.api.accounts.api.CashRequestDto;
 import ru.yandex.practicum.bankapp.cash.service.CashService;
 
 @Slf4j
@@ -17,17 +16,16 @@ public class CashController {
 
     private final CashService cashService;
 
-    @PostMapping("/deposit")
-    public void deposit(
+    @PostMapping("/change")
+    public void handleCash(
             @RequestBody CashRequestDto requestDto
     ) {
-        cashService.deposit(requestDto);
+        cashService.handleCash(requestDto);
     }
 
-    @PostMapping("/withdraw")
-    public void withdraw(
-            @RequestBody CashRequestDto requestDto
+    public record CashRequestDto(
+            String login, String currency, Double value, Action action
     ) {
-        cashService.withdraw(requestDto);
+        public enum Action {PLUS, MINUS}
     }
 }

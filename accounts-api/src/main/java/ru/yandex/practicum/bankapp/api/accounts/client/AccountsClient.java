@@ -3,7 +3,7 @@ package ru.yandex.practicum.bankapp.api.accounts.client;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import ru.yandex.practicum.bankapp.api.accounts.api.CashRequestDto;
+import ru.yandex.practicum.bankapp.api.accounts.api.BalanceChangeRequestDto;
 
 @FeignClient(
         name = "accountsClient",
@@ -11,9 +11,6 @@ import ru.yandex.practicum.bankapp.api.accounts.api.CashRequestDto;
 )
 public interface AccountsClient {
 
-    @PostMapping("/api/v1/internal/cash/deposit")
-    void deposit(@RequestBody CashRequestDto request);
-
-    @PostMapping("/api/v1/internal/cash/withdraw")
-    void withdraw(@RequestBody CashRequestDto request);
+    @PostMapping("/api/v1/internal/balance/change")
+    void changeBalance(@RequestBody BalanceChangeRequestDto request);
 }

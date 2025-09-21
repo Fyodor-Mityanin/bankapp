@@ -10,7 +10,7 @@ import ru.yandex.practicum.bankapp.accounts.controller.UserResponse;
 import ru.yandex.practicum.bankapp.accounts.entity.Account;
 import ru.yandex.practicum.bankapp.accounts.entity.AccountBalance;
 import ru.yandex.practicum.bankapp.accounts.repository.AccountRepository;
-import ru.yandex.practicum.bankapp.api.accounts.api.CashRequestDto;
+import ru.yandex.practicum.bankapp.api.accounts.api.BalanceChangeRequestDto;
 
 import java.util.HashSet;
 import java.util.List;
@@ -44,7 +44,8 @@ public class AccountService {
     }
 
     @Transactional(readOnly = true)
-    public AccountResponse getAccount(Account account) {
+    public AccountResponse getAccount(Long id) {
+        Account account = accountRepository.findById(id).orElseThrow();
         return accountMapper.toResponse(account);
     }
 
@@ -62,12 +63,13 @@ public class AccountService {
     }
 
     @Transactional
-    public void editBalance(Account account, CashRequestDto request, Operator operator) {
-        double delta = switch (operator) {
+    public void editBalance(BalanceChangeRequestDto request) {
+        double delta = switch (request.action()) {
             case PLUS -> request.value();
             case MINUS -> -request.value();
         };
-
+        Account account = accountRepository.findByLogin(request.login())
+                .orElseThrow();
         account.getBalances().stream()
                 .filter(i -> i.getCurrency().equals(request.currency()))
                 .findFirst()
@@ -79,10 +81,5 @@ public class AccountService {
         return accountRepository.findAll().stream()
                 .map(accountMapper::toUserResponse)
                 .toList();
-    }
-
-    public enum Operator {
-        PLUS,
-        MINUS
     }
 }

@@ -46,7 +46,7 @@ public class UserController {
     @GetMapping("/me")
     public AccountResponse me(Authentication authentication) {
         Account account = (Account) authentication.getPrincipal();
-        return accountService.getAccount(account);
+        return accountService.getAccount(account.getId());
     }
 
     @PostMapping("/edit")

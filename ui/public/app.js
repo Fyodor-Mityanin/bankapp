@@ -135,15 +135,19 @@ function renderCashForm() {
         const currency = document.getElementById("cashCurrency").value;
         const value = document.getElementById("cashValue").value;
 
-        const url = action === "deposit"
-            ? `${API_HOST}/api/v1/cash/deposit`
-            : `${API_HOST}/api/v1/cash/withdraw`;
+        const data = {
+            currency,
+            value,
+            login: currentUser.login,
+            action: action === "deposit" ? "PLUS" : "MINUS"
+        };
+
+        const url = `${API_HOST}/api/v1/cash/change`;
 
         const resp = await fetch(url, {
             method: "POST",
             headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({currency, value}),
-            credentials: "include"
+            body: JSON.stringify(data),
         });
 
         if (resp.ok) {
