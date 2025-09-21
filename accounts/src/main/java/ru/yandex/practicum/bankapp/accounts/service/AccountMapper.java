@@ -48,6 +48,21 @@ public abstract class AccountMapper {
 
     protected AccountResponse.BalanceDto toResponse(AccountBalance source) {
         AccountResponse.CurrencyDto currencyDto = new AccountResponse.CurrencyDto(source.getCurrency(), CURRENCY_MAP.get(source.getCurrency()));
-        return  new AccountResponse.BalanceDto(source.getEnable(), currencyDto, source.getAmount());
+        return new AccountResponse.BalanceDto(source.getEnable(), currencyDto, source.getAmount());
+    }
+
+    @AfterMapping
+    void afterMapping(@MappingTarget Account target, AccountRequest source) {
+        List<AccountBalance> list = CURRENCY_MAP.keySet().stream()
+                .map(key -> {
+                    AccountBalance accountBalance = new AccountBalance();
+                    accountBalance.setCurrency(key);
+                    accountBalance.setAccount(target);
+                    accountBalance.setEnable(false);
+                    accountBalance.setAmount(0.0);
+                    return accountBalance;
+                })
+                .toList();
+        target.getBalances().addAll(list);
     }
 }

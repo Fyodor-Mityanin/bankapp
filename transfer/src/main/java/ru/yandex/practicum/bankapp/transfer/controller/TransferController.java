@@ -16,15 +16,27 @@ public class TransferController {
 
     private final TransferService transferService;
 
-    @PostMapping("/change")
-    public void handleTransfer(
-            @RequestBody TransferRequestDto requestDto
+    @PostMapping("/self")
+    public void selfTransfer(
+            @RequestBody SelfTransferRequestDto requestDto
     ) {
-        transferService.handle(requestDto);
+        transferService.self(requestDto);
     }
 
-    public record TransferRequestDto(
+    @PostMapping("/else")
+    public void elseTransfer(
+            @RequestBody ElseTransferRequestDto requestDto
+    ) {
+        transferService.elsee(requestDto);
+    }
+
+    public record SelfTransferRequestDto(
             String from, String to, String login, Double value
+    ) {
+    }
+
+    public record ElseTransferRequestDto(
+            String from, String to, String loginFrom, String loginTo, Double value
     ) {
     }
 }
