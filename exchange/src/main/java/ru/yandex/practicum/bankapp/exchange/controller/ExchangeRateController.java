@@ -27,8 +27,8 @@ public class ExchangeRateController {
         return exchangeRateService.getLast();
     }
 
-    @PostMapping("/api/v1/rates/actual")
-    ExchangeRateDto getSpecificRate(RateRequestDto request) {
+    @PostMapping("/actual")
+    ExchangeRateDto getSpecificRate(@RequestBody RateRequestDto request) {
         return exchangeRateService.getByFromTo(request);
     }
 }

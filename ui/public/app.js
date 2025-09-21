@@ -187,8 +187,12 @@ function renderTransferSelfForm() {
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify(data)
         });
-        if (resp.ok) alert("Перевод выполнен");
-        else alert("Ошибка при переводе");
+        if (resp.ok) {
+            alert("Операция выполнена");
+            location.reload();
+        } else {
+            alert("Ошибка при операции");
+        }
     };
 }
 

@@ -2,6 +2,7 @@ package ru.yandex.practicum.bankapp.api.exchange.client;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import ru.yandex.practicum.bankapp.api.exchange.api.ExchangeRateDto;
 import ru.yandex.practicum.bankapp.api.exchange.api.RateRequestDto;
 
@@ -18,5 +19,5 @@ public interface ExchangeClient {
     void getRate(ExchangeRateDto request);
 
     @PostMapping("/api/v1/rates/actual")
-    ExchangeRateDto getaActualRate(RateRequestDto request);
+    ExchangeRateDto getaActualRate(@RequestBody RateRequestDto request);
 }
