@@ -6,7 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.bankapp.accounts.entity.Account;
 import ru.yandex.practicum.bankapp.accounts.service.AccountService;
-import ru.yandex.practicum.bankapp.api.exchangegenerator.api.CashRequestDto;
+import ru.yandex.practicum.bankapp.api.accounts.api.CashRequestDto;
 
 @Slf4j
 @RestController

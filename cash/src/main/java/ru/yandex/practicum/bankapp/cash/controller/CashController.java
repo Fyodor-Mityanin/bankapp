@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.yandex.practicum.bankapp.api.exchangegenerator.api.CashRequestDto;
+import ru.yandex.practicum.bankapp.api.accounts.api.CashRequestDto;
 import ru.yandex.practicum.bankapp.cash.service.CashService;
 
 @Slf4j
@@ -28,6 +28,6 @@ public class CashController {
     public void withdraw(
             @RequestBody CashRequestDto requestDto
     ) {
-        cashService.deposit(requestDto);
+        cashService.withdraw(requestDto);
     }
 }

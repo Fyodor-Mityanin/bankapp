@@ -1,6 +1,6 @@
 server:
   port: 8084
 
-exchange:
+accounts:
   service:
-    url: http://localhost:8082
+    url: http://localhost:8081

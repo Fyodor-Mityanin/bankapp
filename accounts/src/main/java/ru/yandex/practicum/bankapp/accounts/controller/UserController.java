@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.bankapp.accounts.entity.Account;
 import ru.yandex.practicum.bankapp.accounts.service.AccountService;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 @RequestMapping("api/v1/user")
@@ -56,6 +58,11 @@ public class UserController {
         accountService.edit(account, request);
     }
 
+    @GetMapping("/all")
+    public List<UserResponse> fetAll() {
+        return accountService.getAll();
+    }
+
     private void setToContext(
             Authentication authentication,
             HttpServletRequest httpRequest,
@@ -66,6 +73,8 @@ public class UserController {
         securityContextRepository.saveContext(context, httpRequest, httpResponse);
         log.info("Session ID: {}", httpRequest.getSession().getId());
     }
+
+
 
     public record ChangePasswordRequest(String password, String confirmPassword) {
     }

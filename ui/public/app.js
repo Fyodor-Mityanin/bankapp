@@ -136,13 +136,13 @@ function renderCashForm() {
         const value = document.getElementById("cashValue").value;
 
         const url = action === "deposit"
-            ? `${API_HOST}/api/v1/accounts/balance/deposit`
-            : `${API_HOST}/api/v1/accounts/balance/withdraw`;
+            ? `${API_HOST}/api/v1/cash/deposit`
+            : `${API_HOST}/api/v1/cash/withdraw`;
 
         const resp = await fetch(url, {
             method: "POST",
             headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({ currency, value }),
+            body: JSON.stringify({currency, value}),
             credentials: "include"
         });
 
@@ -191,7 +191,11 @@ function renderTransferSelfForm() {
 async function renderTransferOtherForm() {
     const el = document.getElementById("transfer_other_form");
     const opts = currentUser.currencies.map(c => `<option value="${c.name}">${c.title}</option>`).join("");
-    const resp = await fetch(`${API_HOST}/api/users`);
+    const resp = await fetch(
+        `${API_HOST}/api/v1/accounts/user/all`, {
+            credentials: "include"
+        }
+    );
     const users = await resp.json();
     const userOpts = users.map(u => `<option value="${u.login}">${u.name}</option>`).join("");
     el.innerHTML = `

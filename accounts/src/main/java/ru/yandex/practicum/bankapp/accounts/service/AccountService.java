@@ -6,12 +6,14 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.bankapp.accounts.controller.AccountEditRequest;
 import ru.yandex.practicum.bankapp.accounts.controller.AccountRequest;
 import ru.yandex.practicum.bankapp.accounts.controller.AccountResponse;
+import ru.yandex.practicum.bankapp.accounts.controller.UserResponse;
 import ru.yandex.practicum.bankapp.accounts.entity.Account;
 import ru.yandex.practicum.bankapp.accounts.entity.AccountBalance;
 import ru.yandex.practicum.bankapp.accounts.repository.AccountRepository;
-import ru.yandex.practicum.bankapp.api.exchangegenerator.api.CashRequestDto;
+import ru.yandex.practicum.bankapp.api.accounts.api.CashRequestDto;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -71,6 +73,12 @@ public class AccountService {
                 .findFirst()
                 .ifPresent(balance -> balance.setAmount(balance.getAmount() + delta));
         accountRepository.save(account);
+    }
+
+    public List<UserResponse> getAll() {
+        return accountRepository.findAll().stream()
+                .map(accountMapper::toUserResponse)
+                .toList();
     }
 
     public enum Operator {
