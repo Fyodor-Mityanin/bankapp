@@ -4,7 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.yandex.practicum.bankapp.api.exchangegenerator.api.ExchangeRateDto;
+import ru.yandex.practicum.bankapp.api.exchange.api.ExchangeRateDto;
+import ru.yandex.practicum.bankapp.api.exchange.api.RateRequestDto;
 import ru.yandex.practicum.bankapp.exchange.controller.CurrencyDto;
 import ru.yandex.practicum.bankapp.exchange.entity.Currency;
 import ru.yandex.practicum.bankapp.exchange.entity.ExchangeRate;
@@ -21,6 +22,7 @@ public class ExchangeRateService {
 
     private final ExchangeRateRepository exchangeRateRepository;
     private final CurrencyRepository currencyRepository;
+    private final ExchangeMapper exchangeMapper;
 
     @Transactional
     public void save(ExchangeRateDto exchangeRateDto) {
@@ -39,8 +41,17 @@ public class ExchangeRateService {
 
     public List<CurrencyDto> getLast() {
         return exchangeRateRepository.findLatestRates("RUB").stream()
-                .map(i -> new CurrencyDto(i.getCurrencyTo().getCode(), i.getCurrencyTo().getName(), i.getRate()))
+                .map(exchangeMapper::toCurrencyDto)
                 .sorted(Comparator.comparing(CurrencyDto::name))
                 .toList();
+    }
+
+    public ExchangeRateDto getByFromTo(RateRequestDto request) {
+        return exchangeRateRepository.findFirstByCurrencyFrom_CodeAndCurrencyTo_CodeOrderByCreatedAtDesc(
+                        request.from(),
+                        request.to()
+                )
+                .map(exchangeMapper::toDto)
+                .orElseThrow();
     }
 }

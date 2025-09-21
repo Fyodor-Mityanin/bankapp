@@ -1,11 +1,13 @@
 package ru.yandex.practicum.bankapp.exchange.repository;
 
+import jakarta.validation.constraints.Size;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.bankapp.exchange.entity.ExchangeRate;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ExchangeRateRepository extends JpaRepository<ExchangeRate, Integer> {
@@ -21,4 +23,9 @@ public interface ExchangeRateRepository extends JpaRepository<ExchangeRate, Inte
             )
             """)
     List<ExchangeRate> findLatestRates(String currencyFrom);
+
+    Optional<ExchangeRate> findFirstByCurrencyFrom_CodeAndCurrencyTo_CodeOrderByCreatedAtDesc(
+            @Size(max = 3) String from,
+            @Size(max = 3) String to
+    );
 }

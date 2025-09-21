@@ -7,7 +7,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @EnableScheduling
-@EnableFeignClients(basePackages = "ru.yandex.practicum.bankapp.api.exchangegenerator.client")
+@EnableFeignClients(basePackages = "ru.yandex.practicum.bankapp.api.exchange.client")
 public class ExchangeGeneratorApplication {
 
 	public static void main(String[] args) {

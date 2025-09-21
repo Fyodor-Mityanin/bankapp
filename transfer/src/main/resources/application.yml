@@ -1,0 +1,10 @@
+spring:
+ application:
+  name: transfer
+
+accounts:
+  service:
+    url: http://localhost:8081
+exchange:
+  service:
+    url: http://localhost:8082

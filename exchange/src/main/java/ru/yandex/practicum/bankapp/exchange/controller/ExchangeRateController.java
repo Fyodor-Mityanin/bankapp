@@ -3,7 +3,8 @@ package ru.yandex.practicum.bankapp.exchange.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.bankapp.api.exchangegenerator.api.ExchangeRateDto;
+import ru.yandex.practicum.bankapp.api.exchange.api.ExchangeRateDto;
+import ru.yandex.practicum.bankapp.api.exchange.api.RateRequestDto;
 import ru.yandex.practicum.bankapp.exchange.service.ExchangeRateService;
 
 import java.util.List;
@@ -24,5 +25,10 @@ public class ExchangeRateController {
     @GetMapping
     List<CurrencyDto> getRates() {
         return exchangeRateService.getLast();
+    }
+
+    @PostMapping("/api/v1/rates/actual")
+    ExchangeRateDto getSpecificRate(RateRequestDto request) {
+        return exchangeRateService.getByFromTo(request);
     }
 }

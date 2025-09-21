@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.bankapp.api.exchangegenerator.api.ExchangeRateDto;
-import ru.yandex.practicum.bankapp.api.exchangegenerator.client.ExchangeClient;
+import ru.yandex.practicum.bankapp.api.exchange.api.ExchangeRateDto;
+import ru.yandex.practicum.bankapp.api.exchange.client.ExchangeClient;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

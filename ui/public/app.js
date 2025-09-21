@@ -170,8 +170,8 @@ function renderTransferSelfForm() {
         <table style="width:100%;padding:10px;background-color:whitesmoke;">
           <tr>
             <td style="font-weight:bold;">Перевод себе</td>
-            <td>Со счета <select name="from_currency">${opts}</select></td>
-            <td>На счет <select name="to_currency">${opts}</select></td>
+            <td>Со счета <select name="from">${opts}</select></td>
+            <td>На счет <select name="to">${opts}</select></td>
             <td><input name="value" type="number" required/></td>
             <td style="text-align:right"><button>Перевести</button></td>
           </tr>
@@ -181,8 +181,8 @@ function renderTransferSelfForm() {
     document.getElementById("transferSelfForm").onsubmit = async (e) => {
         e.preventDefault();
         const data = Object.fromEntries(new FormData(e.target));
-        data.to_login = currentUser.login;
-        const resp = await fetch(`${API_HOST}/api/user/${currentUser.login}/transfer`, {
+        data.login = currentUser.login;
+        const resp = await fetch(`${API_HOST}/api/v1/transfer/change`, {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify(data)

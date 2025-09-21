@@ -44,6 +44,13 @@ spring:
               filters:
                 - RewritePath=/api/v1/cash/(?<segment>.*), /api/v1/${segment}
 
+            - id: transfer
+              uri: http://localhost:8085
+              predicates:
+                - Path=/api/v1/transfer/**
+              filters:
+                - RewritePath=/api/v1/transfer/(?<segment>.*), /api/v1/${segment}
+
 logging:
   level:
     org.springframework.cloud.gateway: DEBUG

@@ -22,6 +22,7 @@
         <module>exchange</module>
         <module>cash</module>
         <module>accounts-api</module>
+        <module>transfer</module>
     </modules>
 
     <properties>
